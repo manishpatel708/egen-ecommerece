@@ -2,19 +2,17 @@ package com.example.ecommerce.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +51,7 @@ public class Product implements Serializable {
 	@Column(name = "updatedAt", nullable = false)
 	private LocalDate updatedAt;
 
-	@OneToMany(targetEntity = OrderItem.class, fetch = FetchType.LAZY, mappedBy = "product")
-	private List<OrderItem> orderItems;
+//	@OneToMany(targetEntity = OrderItem.class, fetch = FetchType.LAZY, mappedBy = "product")
+//	private List<OrderItem> orderItems;
 
 }

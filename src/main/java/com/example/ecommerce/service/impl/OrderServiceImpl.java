@@ -2,7 +2,6 @@ package com.example.ecommerce.service.impl;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,8 @@ public class OrderServiceImpl implements OrderService {
 	private OrderItemRepository orderItemRepository;
 
 	@Transactional
-	public void updateOrderStatus(String orderId, String orderStatus) throws Exception {
+	public void updateOrderStatus(long orderId, String orderStatus) throws Exception {
+		log.info("update order status{}", orderStatus);
 		Optional<Order> optionalOrder = orderRepository.findById(orderId);
 		if (optionalOrder.isPresent()) {
 			Order order = optionalOrder.get();
@@ -50,7 +50,8 @@ public class OrderServiceImpl implements OrderService {
 		}
 	}
 
-	public OrderDto findOrderById(String orderId) {
+	public OrderDto findOrderById(long orderId) {
+		log.info("find Order By Id {}", orderId);
 		Optional<Order> optionalOrder = orderRepository.findById(orderId);
 		if (optionalOrder.isPresent()) {
 			return modelMapper.map(optionalOrder.get(), OrderDto.class);
@@ -64,17 +65,29 @@ public class OrderServiceImpl implements OrderService {
 		log.info("Creating Order for customer {}", orderDto.getCustomerId());
 		Order mappedOrder = modelMapper.map(orderDto, Order.class);
 		mappedOrder.setPayment(orderDetailsMapper.buildAndLoadPayment(orderDto.getAmount(), orderDto.getPaymentMode()));
-		mappedOrder.setOrderStatus(OrderStatus.PROCESSING.name());
+		mappedOrder.setOrderStatus(OrderStatus.RECEIVED.name());
 		mappedOrder.setBillingAddress(orderDetailsMapper.buildAndLoadAddress(orderDto.getBillingAddress()));
 		mappedOrder.setShippingAddress(orderDetailsMapper.buildAndLoadAddress(orderDto.getShippingAddress()));
 		Order savedOrder = orderRepository.save(mappedOrder);
 
-		System.err.println("savedOrder ::" + savedOrder);
+		log.info("savedOrder :: {}", savedOrder);
 		List<OrderItem> orderItemList = orderDetailsMapper.buildOrderItems(orderDto.getOrderItems(),
 				savedOrder.getOrderId());
-		System.err.println("orderItemList :: " + orderItemList.size());
+		log.info("orderItemList :: {}", orderItemList.size());
 		orderItemRepository.saveAll(orderItemList);
 		return new OrderCreateResponse(savedOrder.getOrderId(), savedOrder.getOrderStatus());
+	}
+
+	@Override
+	public List<Order> getAllOrder() {
+		log.info("Get all Order {}");
+		return orderRepository.findAll();
+	}
+
+	@Override
+	public void deleteOrder(long orderId) {
+		log.info("delete Order {}", orderId);
+		orderRepository.deleteById(orderId);
 	}
 
 }

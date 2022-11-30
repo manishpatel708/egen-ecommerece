@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,8 +20,6 @@ import com.example.ecommerce.model.Payment;
 import com.example.ecommerce.repository.AddressRepository;
 import com.example.ecommerce.repository.OrderItemRepository;
 import com.example.ecommerce.repository.PaymentRepository;
-
-import jakarta.validation.constraints.NotNull;
 
 @Component
 public class OrderDetailsMapper {
@@ -51,15 +51,13 @@ public class OrderDetailsMapper {
 		return payment;
 	}
 
-	@NotNull
-	public Address buildAndLoadAddress(@NotNull AddressDto addressDto) {
+	public Address buildAndLoadAddress(AddressDto addressDto) {
 		Address addressEntity = this.toAddressEntity(addressDto);
 		Object var10000 = this.addressRepository.save(addressEntity);
 		return (Address) var10000;
 	}
 
-	@NotNull
-	public List<OrderItem> buildOrderItems(@NotNull List<OrderItemDto> orderItemsDtoList, @NotNull long orderId) {
+	public List<OrderItem> buildOrderItems(List<OrderItemDto> orderItemsDtoList, long orderId) {
 		List<OrderItem> list = new ArrayList<>();
 
 		System.err.println("buildOrderItems :: orderId :: " + orderId);
@@ -75,7 +73,7 @@ public class OrderDetailsMapper {
 			System.err.println("order item list :: " + orderItem);
 		});
 
-		return (@NotNull List<OrderItem>) orderItemRepository.saveAll(list);
+		return (List<OrderItem>) orderItemRepository.saveAll(list);
 
 	}
 

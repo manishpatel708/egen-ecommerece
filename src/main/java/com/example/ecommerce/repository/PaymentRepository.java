@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.ecommerce.model.Payment;
 
 @Repository
-public interface PaymentRepository extends CrudRepository<Payment, String> {
+public interface PaymentRepository extends CrudRepository<Payment, Long> {
 
 }

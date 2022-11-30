@@ -2,12 +2,15 @@ package com.example.ecommerce.model;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +27,17 @@ public class OrderItem implements Serializable {
 	@EmbeddedId
 	private OrderItemPk orderItemPk;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "product_id", insertable = false, updatable = false)
 	private Product product;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "order_id", insertable = false, updatable = false)
 	private Order order;
 
 	@Column(name = "quantity", nullable = false)
-	private String quantity;
+	private int quantity;
 
 }
